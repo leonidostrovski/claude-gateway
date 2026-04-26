@@ -34,4 +34,4 @@ All homelab access MUST go through MCP tools:
 - Container: `192.168.20.108` (LXC 9000, proxmox04)
 - Server file: `/opt/claude-mcp/server.py`
 - Service: `rc-service claude-mcp restart`
-- Public URL: `https://patronage-gear-devious.ngrok-free.dev`
+- Public URL: `https://patronage-gear-devious.ngrok-free.dev/mcp (streamable-http transport)`
