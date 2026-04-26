@@ -1,7 +1,8 @@
 {
   "mcpServers": {
     "homelab": {
-      "url": "https://patronage-gear-devious.ngrok-free.dev/mcp"
+      "type": "sse",
+      "url": "https://patronage-gear-devious.ngrok-free.dev/sse"
     }
   }
 }
