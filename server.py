@@ -49,5 +49,31 @@ def http_request(url: str, method: str = "GET", headers: dict = None,
     except Exception as e:
         return f"Error: {e}"
 
+@mcp.tool()
+def restart_mcp_container() -> str:
+    """Restart LXC container 9000 (this MCP server) on proxmox04.
+
+    SSHes to proxmox04 and runs 'pct restart 9000' in the background.
+    The ngrok tunnel and MCP service will reconnect in ~30 seconds.
+    """
+    client = paramiko.SSHClient()
+    client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    try:
+        client.connect("proxmox04", username="root",
+                       key_filename="/root/.ssh/claude_gateway", timeout=10)
+        # Run in background with short delay so this SSH session closes cleanly
+        # before the container stops
+        _, stdout, _ = client.exec_command(
+            "nohup bash -c 'sleep 2 && pct restart 9000' >/dev/null 2>&1 &"
+        )
+        stdout.read()
+        client.close()
+        return (
+            "Container 9000 restart initiated on proxmox04. "
+            "The MCP session will drop and reconnect in ~30 seconds."
+        )
+    except Exception as e:
+        return f"Error connecting to proxmox04: {e}"
+
 if __name__ == "__main__":
     mcp.run(transport="sse")
